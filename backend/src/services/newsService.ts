@@ -23,7 +23,7 @@ const fetchNewsAPI = async (query: string) => {
       apiKey: NEWS_API_KEY,
       language: 'en',
       sortBy: 'publishedAt',
-      pageSize: 10
+      pageSize: 5
     }
   });
   return response.data.articles.map((article: any) => ({
@@ -64,7 +64,7 @@ const fetchGuardianAPI = async (query: string) => {
       q: query,
       'api-key': GUARDIAN_API_KEY,
       'order-by': 'newest',
-      'page-size': 10,
+      'page-size': 5,
       lang: 'en',
     },
   });
@@ -89,7 +89,11 @@ export const fetchAllNews = async (query: string) => {
 
   // Combine and remove duplicates (by URL)
   const combinedArticles = [...newsAPIArticles, ...nytArticles, ...guardianArticles];
-  return combinedArticles;
+  const uniqueArticles = combinedArticles.filter(
+    (article, index, self) => index === self.findIndex((a) => a.url === article.url)
+  );
+
+  return uniqueArticles;
 };
 
 // Function to store news articles in the database
