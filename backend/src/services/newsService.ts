@@ -36,7 +36,7 @@ const fetchNewsAPI = async (query: string) => {
   }));
 };
 
-// Fetch news from the New York Times
+// Fetch news from the New York Times API
 const fetchNYTAPI = async (query: string) => {
   const response = await axios.get(NYT_API_URL, {
     params: {
@@ -57,7 +57,7 @@ const fetchNYTAPI = async (query: string) => {
   }));
 };
 
-// Fetch news from The Guardian
+// Fetch news from The Guardian API
 const fetchGuardianAPI = async (query: string) => {
   const response = await axios.get(GUARDIAN_API_URL, {
     params: {
@@ -87,7 +87,7 @@ export const fetchAllNews = async (query: string) => {
     fetchGuardianAPI(query)
   ]);
 
-  // Combine and remove duplicates by URL
+  // Combine the news and remove duplicates by URL
   const combinedArticles = [...newsAPIArticles, ...nytArticles, ...guardianArticles];
   const uniqueArticles = combinedArticles.filter(
     (article, index, self) => index === self.findIndex((a) => a.url === article.url)
@@ -96,7 +96,7 @@ export const fetchAllNews = async (query: string) => {
   return uniqueArticles;
 };
 
-// store news articles in the database
+// Save news articles in the database
 export const saveNewsToDB = async (articles: any[]) => {
   const query = `
     INSERT INTO news (title, source, published_at, content, url, industry)
