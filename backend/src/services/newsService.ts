@@ -36,7 +36,7 @@ const fetchNewsAPI = async (query: string) => {
   }));
 };
 
-// Function to fetch news from the New York Times
+// Fetch news from the New York Times
 const fetchNYTAPI = async (query: string) => {
   const response = await axios.get(NYT_API_URL, {
     params: {
@@ -57,7 +57,7 @@ const fetchNYTAPI = async (query: string) => {
   }));
 };
 
-// Function to fetch news from The Guardian
+// Fetch news from The Guardian
 const fetchGuardianAPI = async (query: string) => {
   const response = await axios.get(GUARDIAN_API_URL, {
     params: {
@@ -79,7 +79,7 @@ const fetchGuardianAPI = async (query: string) => {
   }));
 };
 
-// Fetch and aggregate news from all APIs
+// Fetch news from all APIs
 export const fetchAllNews = async (query: string) => {
   const [newsAPIArticles, nytArticles, guardianArticles] = await Promise.all([
     fetchNewsAPI(query),
@@ -87,7 +87,7 @@ export const fetchAllNews = async (query: string) => {
     fetchGuardianAPI(query)
   ]);
 
-  // Combine and remove duplicates (by URL)
+  // Combine and remove duplicates by URL
   const combinedArticles = [...newsAPIArticles, ...nytArticles, ...guardianArticles];
   const uniqueArticles = combinedArticles.filter(
     (article, index, self) => index === self.findIndex((a) => a.url === article.url)
@@ -96,7 +96,7 @@ export const fetchAllNews = async (query: string) => {
   return uniqueArticles;
 };
 
-// Function to store news articles in the database
+// store news articles in the database
 export const saveNewsToDB = async (articles: any[]) => {
   const query = `
     INSERT INTO news (title, source, published_at, content, url, industry)
