@@ -89,11 +89,7 @@ export const fetchAllNews = async (query: string) => {
 
   // Combine and remove duplicates (by URL)
   const combinedArticles = [...newsAPIArticles, ...nytArticles, ...guardianArticles];
-  const uniqueArticles = combinedArticles.filter(
-    (article, index, self) => index === self.findIndex((a) => a.url === article.url)
-  );
-
-  return uniqueArticles;
+  return combinedArticles;
 };
 
 // Function to store news articles in the database
