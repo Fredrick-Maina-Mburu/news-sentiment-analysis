@@ -9,7 +9,6 @@ const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
 // DB test
-
 testDBConnection();
 
 app.use(express.json());

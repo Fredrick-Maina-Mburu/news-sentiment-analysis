@@ -1,8 +1,8 @@
-import { Router } from 'express'
-import { getNews } from '../controllers/newsController'
+import { Router } from 'express';
+import { updateNews } from '../controllers/newsController';
 
-const router = Router()
+const router = Router();
 
-router.get('/', getNews)
+router.get('/update', updateNews);
 
-export default router
+export default router;
