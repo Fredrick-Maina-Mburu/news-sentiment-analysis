@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { fetchAllNews, saveNewsToDB } from '../services/newsService';
+import { fetchAllNews } from '../services/fetchAllNews';
+import { saveNewsToDB } from '../services/saveNewstoDB';
 
 export const updateNews = async (req: Request, res: Response) => {
   try {
