@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import { testDBConnection } from './controllers/dbTest';
 import newsRoutes from './routes/newsRoutes';
+import scheduleNewsFetching from './services/Scheduler';
 
 dotenv.config();
 
@@ -12,6 +13,9 @@ const PORT = process.env.PORT || 5000;
 testDBConnection();
 
 app.use(express.json());
+
+//Schedule news fetching
+scheduleNewsFetching();
 
 // Routes
 app.use('/api/news', newsRoutes);
