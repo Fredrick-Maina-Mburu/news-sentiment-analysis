@@ -2,7 +2,8 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import { testDBConnection } from './controllers/dbTest';
 import newsRoutes from './routes/newsRoutes';
-import scheduleNewsFetching from './services/Scheduler';
+import authRoutes from './routes/authRoutes';
+import scheduleNewsFetching from './services/scheduler';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 scheduleNewsFetching();
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
 
 app.listen(PORT, () => {
