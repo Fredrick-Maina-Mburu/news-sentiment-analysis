@@ -3,7 +3,7 @@ import { fetchAndSaveNews } from './newsService';
 
 // Schedule to fetch news every 6 hours
 const scheduleNewsFetching = () => {
-  cron.schedule('* * /1 * * *', async () => {
+  cron.schedule('* */1 * * *', async () => {
     console.log('Starting scheduled news fetch and analysis...');
     
     try {

@@ -1,4 +1,4 @@
 declare module 'node-cron' {
-  const vader: any;
+  const cron: any;
   export default cron;
 }
