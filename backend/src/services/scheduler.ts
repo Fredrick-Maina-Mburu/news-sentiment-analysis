@@ -1,9 +1,9 @@
 import cron from 'node-cron';
 import { fetchAndSaveNews } from './newsService';
 
-// Schedule to fetch news every 6 hours
+// Schedule to fetch news every 8 hours
 const scheduleNewsFetching = () => {
-  cron.schedule('* */1 * * *', async () => {
+  cron.schedule('* */8 * * *', async () => {
     console.log('Starting scheduled news fetch and analysis...');
     
     try {
