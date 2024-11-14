@@ -1,6 +1,5 @@
- export type User = {
-  id: string;
-  name: string;
+ export interface JWTPayload {
+  user_id: string;
   email: string;
-  password: string;
+  username: string;
 }

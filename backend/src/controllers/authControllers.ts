@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../config/db";
 
-const JWT_SECRET = process.env.JWT_SECRET!;
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // Register new user
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
@@ -54,8 +54,12 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ error: "Invalid password or email" });
       return;
     }
-
-    const token = jwt.sign({ userId: user.user_id }, JWT_SECRET, { expiresIn: "1h" });
+    const payload = {
+      user_id: user.user_id, 
+      email: user.email,
+      username: user.username,
+    }
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
     res.status(200).json({
       token,
