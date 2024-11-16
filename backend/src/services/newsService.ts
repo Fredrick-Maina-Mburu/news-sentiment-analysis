@@ -1,7 +1,8 @@
 import axios from "axios";
 import dotenv from "dotenv";
+import pool from "../config/db";
 import { saveNewsToDB } from "./saveNewstoDB";
-
+import { notifySubscribers } from "./notifySubscribers";
 
 dotenv.config();
 
@@ -77,9 +78,8 @@ export const fetchGuardianAPI = async (query: string) => {
   }));
 };
 
-
 export const fetchAndSaveNews = async () => {
-  const queries = ['technology', 'finance', 'business'];
+  const queries = ["technology", "finance", "business", "health"];
 
   for (const query of queries) {
     const allArticles: any[] = [];
@@ -91,16 +91,33 @@ export const fetchAndSaveNews = async () => {
       const guardianArticles = await fetchGuardianAPI(query);
 
       // Combine all articles
-      allArticles.push(...newsAPIArticles, ...nyTimesArticles, ...guardianArticles);
+      allArticles.push(
+        ...newsAPIArticles,
+        ...nyTimesArticles,
+        ...guardianArticles
+      );
     } catch (error) {
       console.error(`Error fetching news for query "${query}":`, error);
     }
 
-    // Save all the data to the DB
+    
     if (allArticles.length > 0) {
+      // Save all the data to the DB
       await saveNewsToDB(allArticles);
+
+      const res = await pool.query(`SELECT n.*, s.score, s.sentiment FROM news n INNER JOIN sentiment_scores s ON n.news_id = s.news_id ORDER BY n.created_at DESC LIMIT 5`);
+
+      // Notify Subscribers
+      try {
+        const articles = res.rows;
+        await notifySubscribers(query, articles);
+        console.log(`Notified subscribers for topic: ${query}`);
+      } catch (error) {
+        console.error(
+          `Error notifying subscribers for topic "${query}":`,
+          error
+        );
+      }
     }
   }
 };
-
-

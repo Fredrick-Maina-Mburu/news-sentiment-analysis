@@ -5,7 +5,6 @@ import newsRoutes from './routes/newsRoutes';
 import authRoutes from './routes/authRoutes';
 import subRoutes from './routes/subscriptionRoutes';
 import scheduleNewsFetching from './services/scheduler';
-import { fetchAllNewsFromDB } from './services/fetchAllNews';
 
 dotenv.config();
 
@@ -18,8 +17,8 @@ testDBConnection();
 app.use(express.json());
 
 //Schedule news fetching
-// scheduleNewsFetching();
-fetchAllNewsFromDB();
+scheduleNewsFetching();
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
