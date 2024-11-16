@@ -1,8 +1,9 @@
 import { Router } from 'express';
-import { updateNews } from '../controllers/newsController';
+import { fetchByTopic, fetchNews } from '../controllers/newsController';
 
 const router = Router();
 
-router.get('/update', updateNews);
+router.get('/update', fetchByTopic);
+router.get('/', fetchNews); // Fetch all news
 
 export default router;

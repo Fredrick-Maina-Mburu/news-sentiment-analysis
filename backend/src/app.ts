@@ -17,7 +17,7 @@ testDBConnection();
 app.use(express.json());
 
 //Schedule news fetching
-// scheduleNewsFetching();
+scheduleNewsFetching();
 
 // Routes
 app.use('/api/auth', authRoutes);
