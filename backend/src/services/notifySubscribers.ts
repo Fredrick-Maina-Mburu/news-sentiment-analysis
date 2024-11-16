@@ -1,5 +1,4 @@
 import transporter from "../config/nodemailerConfig";
-import pool from "../config/db";
 import { getSubscribersByTopic } from "./subscriptionService"; // Fetch subscribers for a topic
 
 export const notifySubscribers = async (topic: string, articles: any[]) => {
@@ -14,7 +13,7 @@ export const notifySubscribers = async (topic: string, articles: any[]) => {
         <li>
           <strong>${article.title}</strong><br />
           Source: ${article.source}<br />
-          Sentiment Score: ${(article.score * 100).toFixed(2)}%<br />
+          Sentiment Score: ${(article.score * 100).toFixed(2)}% - ${article.sentiment}<br />
           Published: ${new Date(article.published_at).toLocaleString()}<br />
           <a href="${article.url}">Read more</a>
         </li>
