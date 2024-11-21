@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // Register new user
 export const registerUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, username, password } = req.body;
+  const { email, name, password } = req.body;
 
   try {
     // Check if email already exists
@@ -24,7 +24,7 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 
     const result = await pool.query(
       `INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING user_id, email, name`,
-      [username, email, hashedPassword]
+      [name, email, hashedPassword]
     );
 
     res.status(201).json({ user: result.rows[0] });
@@ -57,7 +57,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     const payload = {
       user_id: user.user_id, 
       email: user.email,
-      username: user.username,
+      name: user.name,
     }
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
@@ -66,7 +66,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       user: {
         user_id: user.user_id,
         email: user.email,
-        username: user.name,
+        name: user.name,
       },
     });
     return;

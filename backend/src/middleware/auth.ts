@@ -18,7 +18,7 @@ export const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
     try {      
       const verified = jwt.verify(token, secret);
       req.user = verified as JWTPayload;
-      console.log(req.user)
+      // console.log(req.user)
       next();
     } catch (error) {
       res.status(400).json({ message: "Invalid token" });

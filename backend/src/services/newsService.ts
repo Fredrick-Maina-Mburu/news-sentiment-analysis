@@ -79,7 +79,7 @@ export const fetchGuardianAPI = async (query: string) => {
 };
 
 export const fetchAndSaveNews = async () => {
-  const queries = ["technology", "finance", "business", "health"];
+  const queries = ["technology", "finance", "business", "health", "sports", "education"];
 
   for (const query of queries) {
     const allArticles: any[] = [];

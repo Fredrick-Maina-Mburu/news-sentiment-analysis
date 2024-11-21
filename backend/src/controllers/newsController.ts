@@ -4,7 +4,7 @@ import { fetchNewsByIndustry, fetchAllNewsFromDB } from '../services/fetchAllNew
 
 export const fetchByTopic = async (req: Request, res: Response) => {
   try {
-    const query = req.query.q || 'business';
+    const query = req.query.topic || 'business';
     const articles = await fetchNewsByIndustry(query as string);
 
     res.status(200).json(articles);

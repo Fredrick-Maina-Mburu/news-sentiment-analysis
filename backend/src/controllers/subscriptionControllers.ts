@@ -35,7 +35,7 @@ export const addSubscription = async (
   if (req.user) {
     const user= req.user as JWTPayload;
     const user_id = user.user_id;
-    console.log("user_id in addSubscription:", user_id);
+    // console.log("user_id in addSubscription:", user_id);
     try {
       const result = await pool.query(
         "INSERT INTO subscriptions (user_id, industry) VALUES ($1, $2) RETURNING *",

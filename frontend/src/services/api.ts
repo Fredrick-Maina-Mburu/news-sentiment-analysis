@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginCredentials, RegisterCredentials, AuthResponse, NewsItem, Subscription } from '../types/index';
+import { LoginCredentials, RegisterCredentials, AuthResponse, NewsItem, Subscription, SentimentScore, UserDetails } from '../types/index';
 
 const API_BASE_URL = 'http://localhost:3005/api';
 
@@ -50,18 +50,37 @@ export const newsApi = {
 
 export const subscriptionApi = {
   getSubscriptions: async (): Promise<Subscription[]> => {
-    const { data } = await api.get('/subscriptions/me');
+    const { data } = await api.get('/subscribe/me');
     return data;
   },
 
-  addSubscription: async (topic: string): Promise<Subscription> => {
-    const { data } = await api.post('/subscriptions/add', { topic });
+  addSubscription: async (industry: string): Promise<Subscription> => {
+    const { data } = await api.post('/subscribe/add', { industry });
     return data;
   },
 
-  deleteSubscription: async (subscriptionId: string): Promise<void> => {
-    await api.delete(`/subscriptions/delete/${subscriptionId}`);
+  deleteSubscription: async (subscription_id: string): Promise<void> => {
+    await api.delete(`/subscribe/delete/${subscription_id}`);
   }
+};
+
+export const sentimentApi = {
+  getSentimentScores: async (): Promise<SentimentScore[]> => {
+    const { data } = await api.get('/sentiments/');
+    return data;
+  }
+};
+
+export const UserApi = {
+  deleteUserAccount: async () => {
+    const { data } = await api.delete('/user/delete');
+    return data;
+  },
+  getUserDetails: async (): Promise<UserDetails[]> => {
+    const { data } = await api.get('/user/get');
+    return data;
+  },
+
 };
 
 export default api;

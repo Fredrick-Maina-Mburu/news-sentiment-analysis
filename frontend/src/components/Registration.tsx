@@ -41,7 +41,7 @@ const Registration: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="bg-gray-100 p-8 rounded-lg shadow-md w-96">
+      <div className="bg-gray-100 p-8 rounded-lg shadow-md w-80">
         <h2 className="text-2xl font-semibold text-center mb-4">Register</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input

@@ -17,20 +17,36 @@ export interface RegisterCredentials extends LoginCredentials {
 }
 
 export interface NewsItem {
+  news_id:number;
   title: string;
   source: string;
   url: string;
-  sentimentScore: number;
-  topic: string;
-  publishedAt: string;
+  score: number;
+  sentiment: string;
+  industry: string;
+  published_at: string;
 }
 
 export interface Subscription {
-  id: string;
-  topic: string;
-  userId: string;
-  createdAt: string;
+  subscription_id: string;
+  industry: string;
+  user_id: string;
+  created_at: string;
 }
+export interface SentimentScore {
+  industry: string;
+  score: number;
+  sentiment: string; 
+  published_at: string; 
+}
+
+export interface UserDetails {
+  name: string;
+  email: string;
+  created_at: Date;
+  industry: string[];
+}
+
 
 export interface ApiError {
   message: string;

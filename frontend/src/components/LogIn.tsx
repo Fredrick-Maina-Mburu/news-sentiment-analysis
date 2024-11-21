@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { authApi } from '../services/api';
-import { LoginCredentials } from '../types';
-import { Link } from 'react-router-dom';
-import { Eye, EyeOff } from 'lucide-react';
+import React, { useState } from "react";
+import { authApi } from "../services/api";
+import { LoginCredentials } from "../types";
+import { Link, useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { useAuth } from "../AuthContext";
+
 
 const Login: React.FC = () => {
-  const [credentials, setCredentials] = useState<LoginCredentials>({ email: '', password: '' });
+  const { setIsLoggedIn, setUsername } = useAuth();
+  const [credentials, setCredentials] = useState<LoginCredentials>({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -18,11 +26,15 @@ const Login: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
     try {
       const response = await authApi.login(credentials);
+      setIsLoggedIn(true);
       alert(`Welcome, ${response.user.name}`);
+      setUsername(response.user.name);
+      navigate("/");
     } catch (err: any) {
-      setError(err.response?.data?.error || 'An error occurred');
+      setError(err.response?.data?.error || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -34,7 +46,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <div className="bg-gray-100 p-8 rounded-lg shadow-md w-96">
+      <div className="bg-gray-100 p-8 rounded-lg shadow-md w-80">
         <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -61,11 +73,7 @@ const Login: React.FC = () => {
               onClick={togglePasswordVisibility}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              {showPassword ? (
-                <EyeOff size={20} />
-              ) : (
-                <Eye size={20} />
-              )}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           <button
@@ -73,7 +81,7 @@ const Login: React.FC = () => {
             disabled={loading}
             className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition disabled:bg-gray-400"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
         <div className="mt-2">
@@ -82,7 +90,9 @@ const Login: React.FC = () => {
             Register
           </Link>
         </div>
-        {error && <p className="mt-4 text-red-500 text-sm text-center">{error}</p>}
+        {error && (
+          <p className="mt-4 text-red-500 text-sm text-center">{error}</p>
+        )}
       </div>
     </div>
   );
