@@ -9,11 +9,8 @@ const DeleteAccount: React.FC = () => {
 
   const handleDeleteAccount = async () => {
       try {
-       const response = await UserApi.deleteUserAccount();
-        
+        await UserApi.deleteUserAccount();      
         setIsLoggedIn(false);
-        localStorage.removeItem('token');
-
         navigate('/');
       } catch (error) {
         console.error('Error deleting account:', error);

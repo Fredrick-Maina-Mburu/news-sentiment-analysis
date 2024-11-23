@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LoginCredentials, RegisterCredentials, AuthResponse, NewsItem, Subscription, SentimentScore, UserDetails } from '../types/index';
+import { LoginCredentials, RegisterCredentials, AuthResponse, NewsItem, Subscription, SentimentScore, UserDetails, UserOnlyDetails } from '../types/index';
 
 const API_BASE_URL = 'http://localhost:3005/api';
 
@@ -8,21 +8,25 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
 });
 
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers['auth-token'] = token;
-  }
-  return config;
-});
+// api.interceptors.response.use(
+//   (response) => response,
+//   async (error) => {
+//     if (error.response?.status === 401) {
+//       sessionStorage.clear();
+//       window.location.href = '/login';
+//     }
+//     return Promise.reject(error);
+//   }
+// );
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const { data } = await api.post('/auth/login', credentials);
-    localStorage.setItem('token', data.token);
+    sessionStorage.setItem('isLoggedIn', 'true');
+    sessionStorage.setItem('username', data.name);
     return data;
   },
 
@@ -31,9 +35,10 @@ export const authApi = {
     return data;
   },
 
-  logout: () => {
-    localStorage.removeItem('token');
-  }
+  logout: async (): Promise<void> => {
+    await api.post('/auth/logout');
+  },
+
 };
 
 export const newsApi = {
@@ -78,6 +83,10 @@ export const UserApi = {
   },
   getUserDetails: async (): Promise<UserDetails[]> => {
     const { data } = await api.get('/user/get');
+    return data;
+  },
+  getOnlyUserDetails: async (): Promise<UserOnlyDetails[]> => {
+    const { data } = await api.get('/user/get/me');
     return data;
   },
 

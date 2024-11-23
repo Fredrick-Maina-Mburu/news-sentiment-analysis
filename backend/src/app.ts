@@ -8,6 +8,7 @@ import sentimentRoutes from './routes/sentimentsRoutes';
 import userRoutes from './routes/userRoutes';
 import scheduleNewsFetching from './services/scheduler';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -16,11 +17,11 @@ const PORT = process.env.PORT || 5000;
 
 // DB test
 testDBConnection();
-
+app.use(cookieParser());
 app.use(express.json());
-
 app.use(cors({
-  origin: 'http://localhost:5173'
+  origin: 'http://localhost:5173',
+  credentials: true
 }));
 
 //Schedule news fetching

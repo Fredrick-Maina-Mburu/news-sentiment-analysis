@@ -61,8 +61,13 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000 // 1hr
+    });
     res.status(200).json({
-      token,
       user: {
         user_id: user.user_id,
         email: user.email,
@@ -74,4 +79,9 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     res.status(500).json({ error: "Failed to log in user" });
     return;
   }
+};
+
+export const logout =  async (req:Request, res:Response) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logout successful' });
 };

@@ -4,15 +4,15 @@ import { useAuth } from '../AuthContext';
 import { CircleUserRound, Menu, X, UserCircle, Trash2, LayoutDashboard } from 'lucide-react';
 
 const Navbar: React.FC = () => {
-  const { isLoggedIn, username, setIsLoggedIn } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, logout, username } = useAuth();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
+    logout();
     setIsLoggedIn(false);
-    localStorage.removeItem('token');
     navigate('/');
   };
 
@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
                   <CircleUserRound className="h-6 w-6" />
                   <span className="hidden md:inline">Welcome, {username}</span>
                 </div>
-                
+                {/* {userData.map(res => res.name)} */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <Link
@@ -100,7 +100,7 @@ const Navbar: React.FC = () => {
           className={`
             fixed top-16 left-0 w-64 h-screen bg-white shadow-lg z-30 
             transform transition-transform duration-300 ease-in-out
-            md:hidden
+            sm:hidden
             ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}
         >

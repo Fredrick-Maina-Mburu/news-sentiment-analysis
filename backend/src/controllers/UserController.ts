@@ -36,16 +36,28 @@ export const getUserDetails = async (
         "SELECT u.*, s.industry FROM users u INNER JOIN subscriptions s ON u.user_id = s.user_id WHERE u.user_id = $1",
         [user_id]
       );
-      res
-        .status(200)
-        .json(result.rows);
+      res.status(200).json(result.rows);
+      return;
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ error: "Error getting user" });
+    }
+  }
+};
 
-        // {
-        //   name: result.rows[0].name,
-        //   email: result.rows[0].email,
-        //   created_at: result.rows[0].created_at,
-        //   industry: result.rows.map((row) => row.industry),
-        // }
+export const getOnlyUserDetails = async (
+  req: CustomRequest,
+  res: Response
+): Promise<void> => {
+  if (req.user) {
+    const user = req.user as JWTPayload;
+    const user_id = user.user_id;
+    try {
+      const result = await pool.query(
+        "SELECT name, email, created_at FROM users WHERE user_id = $1",
+        [user_id]
+      );
+      res.status(200).json(result.rows);
       return;
     } catch (error) {
       console.log(error);

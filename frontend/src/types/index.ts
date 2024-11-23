@@ -47,6 +47,12 @@ export interface UserDetails {
   industry: string[];
 }
 
+export interface UserOnlyDetails {
+  name: string;
+  email: string;
+  created_at: string;
+}
+
 
 export interface ApiError {
   message: string;

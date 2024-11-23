@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { UserApi } from "../services/api";
 import { UserDetails } from "../types";
+import { useAuth } from '../AuthContext';
 
 const UserProfile: React.FC = () => {
+  const { isLoggedIn, setIsLoggedIn, logout, username } = useAuth();
   const [userData, setUserData] = useState<UserDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

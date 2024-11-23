@@ -1,5 +1,6 @@
 import express from 'express';
-import {  deleteUser, getUserDetails } from '../controllers/UserController';
+import {  deleteUser, getUserDetails, getOnlyUserDetails}
+ from '../controllers/UserController';
 import { auth } from '../middleware/auth';
 
 const router = express.Router();
@@ -8,5 +9,7 @@ const router = express.Router();
 router.delete('/delete', auth, deleteUser);
 
 router.get('/get', auth, getUserDetails);
+
+router.get('/get/me', auth, getOnlyUserDetails);
 
 export default router;

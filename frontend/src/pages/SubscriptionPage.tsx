@@ -12,6 +12,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { useAuth } from "../AuthContext";
 
 ChartJS.register(
   CategoryScale,
@@ -33,6 +34,7 @@ const topics = [
 ];
 
 const SubscriptionPage: React.FC = () => {
+  const { isLoggedIn, setIsLoggedIn, logout, username } = useAuth();
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [sentimentScores, setSentimentScores] = useState<SentimentScore[]>([]);
   const [loading, setLoading] = useState(false);
@@ -54,7 +56,6 @@ const SubscriptionPage: React.FC = () => {
   const fetchSentimentScores = async () => {
     try {
       const data = await sentimentApi.getSentimentScores();
-      console.log(data);
       setSentimentScores(data);
     } catch (err) {
       console.error("Failed to load sentiment scores:", err);
