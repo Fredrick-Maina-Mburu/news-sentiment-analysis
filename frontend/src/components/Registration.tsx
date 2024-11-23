@@ -29,7 +29,15 @@ const Registration: React.FC = () => {
       alert(`Welcome, ${response.user.name}`);
       return navigate('/login')
     } catch (err: any) {
-      setError(err.response?.data?.error || 'An error occurred');
+      if (err.response?.data?.errors) {
+        let errorMessage = "";
+        for (const error of err.response.data.errors) {
+          errorMessage += `${error.msg}\n`; // Add line breaks between errors
+        }
+        setError(errorMessage);
+      } else {
+        setError(err.response?.data?.error || 'An error occurred');       
+      }
     } finally {
       setLoading(false);
     }

@@ -1,15 +1,25 @@
-import { Request, Response, RequestHandler, NextFunction } from "express";
+import { Request, Response} from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../config/db";
+import { validationResult } from "express-validator";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 // Register new user
-export const registerUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, name, password } = req.body;
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).json({ errors: errors.array() });
+    return;
+  }
 
   try {
+    const { email, name, password } = req.body;
     // Check if email already exists
     const existingUser = await pool.query(
       "SELECT * FROM users WHERE email = $1",
@@ -37,10 +47,18 @@ export const registerUser = async (req: Request, res: Response): Promise<void> =
 
 // User login
 export const loginUser = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400).json({ errors: errors.array() });
+    return;
+  }
 
   try {
-    const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const { email, password } = req.body;
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
     if (result.rows.length === 0) {
       res.status(400).json({ error: "User not found" });
@@ -55,17 +73,17 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
     const payload = {
-      user_id: user.user_id, 
+      user_id: user.user_id,
       email: user.email,
       name: user.name,
-    }
+    };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "1h" });
 
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 60 * 60 * 1000 // 1hr
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000, // 1hr
     });
     res.status(200).json({
       user: {
@@ -81,7 +99,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const logout =  async (req:Request, res:Response) => {
-  res.clearCookie('token');
-  res.json({ message: 'Logout successful' });
+export const logout = async (req: Request, res: Response) => {
+  res.clearCookie("token");
+  res.json({ message: "Logout successful" });
 };
