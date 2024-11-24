@@ -25,7 +25,7 @@ app.use(cors({
 }));
 
 //Schedule news fetching
-scheduleNewsFetching();
+// scheduleNewsFetching();
 
 // Routes
 app.use('/api/auth', authRoutes);
@@ -35,6 +35,8 @@ app.use('/api/sentiments', sentimentRoutes);
 app.use('/api/user', userRoutes);
 
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+export default app;

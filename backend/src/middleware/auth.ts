@@ -7,7 +7,6 @@ interface CustomRequest extends Request {
 }
 
 export const auth = (req: CustomRequest, res: Response, next: NextFunction) => {
-  // const token = req.header("auth-token") as string;
   const token  = req.cookies.token;
   const secret = process.env.JWT_SECRET;
 
